@@ -54,7 +54,7 @@ export default function ImportPage() {
 
         <div className="card space-y-8">
           <div className="space-y-4">
-            <h2 className="text-fluid-body font-bold text-ftour-accentSoft flex items-center gap-2">
+            <h2 className="text-fluid-body font-bold text-ftour-accent-soft flex items-center gap-2">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
               Format du Fichier CSV
             </h2>
@@ -107,7 +107,7 @@ export default function ImportPage() {
 
           <div className="space-y-6 pt-2">
             <div className="space-y-2">
-              <label htmlFor="csv-file" className="text-xs font-black uppercase tracking-widest text-ftour-accentSoft/60 ml-1">
+              <label htmlFor="csv-file" className="text-xs font-black uppercase tracking-widest text-ftour-accent-soft/60 ml-1">
                 Sélectionner le fichier .csv
               </label>
               <div className="relative group">
@@ -133,7 +133,7 @@ export default function ImportPage() {
             {loading && (
               <div className="flex flex-col items-center gap-3 py-4 animate-pulse">
                 <svg className="animate-spin h-6 w-6 text-ftour-accent" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                <p className="text-xs font-bold text-ftour-accentSoft uppercase tracking-widest italic">Importation et envoi des emails en cours...</p>
+                <p className="text-xs font-bold text-ftour-accent-soft uppercase tracking-widest italic">Importation et envoi des emails en cours...</p>
               </div>
             )}
 

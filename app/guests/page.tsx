@@ -126,7 +126,7 @@ export default function GuestsPage() {
         <div className="hidden md:block">
           <table className="w-full text-left">
             <thead>
-              <tr className="bg-ftour-accent/5 text-[10px] uppercase font-black tracking-[0.2em] text-ftour-accentSoft/60">
+              <tr className="bg-ftour-accent/5 text-[10px] uppercase font-black tracking-[0.2em] text-ftour-accent-soft/60">
                 <th className="px-8 py-5">Invité</th>
                 <th className="px-8 py-5">Contact</th>
                 <th className="px-8 py-5 text-center">Statut</th>
@@ -138,7 +138,7 @@ export default function GuestsPage() {
                 <tr><td colSpan={4} className="px-8 py-24 text-center">
                   <div className="flex flex-col items-center gap-4 animate-pulse">
                     <div className="w-10 h-10 border-2 border-ftour-accent/20 border-t-ftour-accent rounded-full animate-spin" />
-                    <span className="text-xs font-bold text-ftour-accentSoft uppercase tracking-widest italic">Chargement...</span>
+                    <span className="text-xs font-bold text-ftour-accent-soft uppercase tracking-widest italic">Chargement...</span>
                   </div>
                 </td></tr>
               ) : guests.length === 0 ? (
@@ -161,12 +161,12 @@ export default function GuestsPage() {
                     </td>
                     <td className="px-8 py-5 text-right">
                       <div className="flex justify-end items-center gap-3">
-                        <Link href={`/api/guests/qr/${guest.qr_code}`} target="_blank" className="text-ftour-accent hover:text-ftour-accentSoft p-2" title="Voir QR">
+                        <Link href={`/api/guests/qr/${guest.qr_code}`} target="_blank" className="text-ftour-accent hover:text-ftour-accent-soft p-2" title="Voir QR">
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h2M4 8h16" /></svg>
                         </Link>
                         <button
                           onClick={() => router.push(`/guests/edit/${guest.id}`)}
-                          className="text-ftour-accentSoft hover:text-ftour-accent p-2"
+                          className="text-ftour-accent-soft hover:text-ftour-accent p-2"
                         >
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                         </button>
@@ -225,7 +225,7 @@ export default function GuestsPage() {
                   <div className="flex gap-2">
                     <button
                       onClick={() => router.push(`/guests/edit/${guest.id}`)}
-                      className="p-2 bg-ftour-accentSoft/10 text-ftour-accentSoft rounded-xl"
+                      className="p-2 bg-ftour-accent-soft/10 text-ftour-accent-soft rounded-xl"
                     >
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                     </button>
@@ -261,7 +261,7 @@ export default function GuestsPage() {
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" /></svg>
           </button>
-          <span className="px-6 text-xs font-bold text-ftour-accentSoft">
+          <span className="px-6 text-xs font-bold text-ftour-accent-soft">
             Page {page} / {totalPages}
           </span>
           <button

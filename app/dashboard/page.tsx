@@ -102,7 +102,7 @@ export default function DashboardPage() {
         {[
           { label: "Total Invités", value: stats.total, color: "text-ftour-accent", icon: "M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" },
           { label: "Vérifiés", value: stats.verified, color: "text-ftour-success", icon: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" },
-          { label: "En Attente", value: stats.pending, color: "text-ftour-accentSoft", icon: "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" }
+          { label: "En Attente", value: stats.pending, color: "text-ftour-accent-soft", icon: "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" }
         ].map((item, i) => (
           <div key={i} className="card relative group overflow-hidden">
             <div className={`absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 transition-opacity ${item.color}`}>
@@ -135,7 +135,7 @@ export default function DashboardPage() {
           <div className="hidden md:block">
             <table className="w-full text-left">
               <thead>
-                <tr className="bg-ftour-accent/5 text-[10px] uppercase font-black tracking-[0.2em] text-ftour-accentSoft/60">
+                <tr className="bg-ftour-accent/5 text-[10px] uppercase font-black tracking-[0.2em] text-ftour-accent-soft/60">
                   <th className="px-8 py-5">Invité</th>
                   <th className="px-8 py-5">Contact</th>
                   <th className="px-8 py-5 text-center">Statut</th>
@@ -222,7 +222,7 @@ export default function DashboardPage() {
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" /></svg>
               </button>
-              <span className="px-4 text-xs font-bold text-ftour-accentSoft">
+              <span className="px-4 text-xs font-bold text-ftour-accent-soft">
                 {page} / {totalPages}
               </span>
               <button
@@ -234,7 +234,7 @@ export default function DashboardPage() {
               </button>
             </div>
           </div>
-          <Link href="/api/guests/export" className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-ftour-accent hover:text-ftour-accentSoft transition-colors">
+          <Link href="/api/guests/export" className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-ftour-accent hover:text-ftour-accent-soft transition-colors">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
             Exporter au format Excel
           </Link>

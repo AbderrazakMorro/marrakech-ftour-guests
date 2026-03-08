@@ -75,7 +75,7 @@ export default function AddGuestPage() {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <label htmlFor="first_name" className="text-xs font-black uppercase tracking-widest text-ftour-accentSoft/60 ml-1">
+                <label htmlFor="first_name" className="text-xs font-black uppercase tracking-widest text-ftour-accent-soft/60 ml-1">
                   Prénom *
                 </label>
                 <input
@@ -90,7 +90,7 @@ export default function AddGuestPage() {
               </div>
 
               <div className="space-y-2">
-                <label htmlFor="last_name" className="text-xs font-black uppercase tracking-widest text-ftour-accentSoft/60 ml-1">
+                <label htmlFor="last_name" className="text-xs font-black uppercase tracking-widest text-ftour-accent-soft/60 ml-1">
                   Nom *
                 </label>
                 <input
@@ -106,7 +106,7 @@ export default function AddGuestPage() {
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="email" className="text-xs font-black uppercase tracking-widest text-ftour-accentSoft/60 ml-1">
+              <label htmlFor="email" className="text-xs font-black uppercase tracking-widest text-ftour-accent-soft/60 ml-1">
                 Email *
               </label>
               <input
@@ -121,7 +121,7 @@ export default function AddGuestPage() {
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="phone" className="text-xs font-black uppercase tracking-widest text-ftour-accentSoft/60 ml-1">
+              <label htmlFor="phone" className="text-xs font-black uppercase tracking-widest text-ftour-accent-soft/60 ml-1">
                 Téléphone
               </label>
               <input

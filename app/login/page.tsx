@@ -57,7 +57,7 @@ function LoginContent() {
           <h1 className="text-fluid-h2 font-display font-black tracking-tight text-ftour-text italic">
             Marrakech Ftour
           </h1>
-          <p className="text-xs font-bold uppercase tracking-[0.3em] text-ftour-accentSoft mt-2 opacity-60">
+          <p className="text-xs font-bold uppercase tracking-[0.3em] text-ftour-accent-soft mt-2 opacity-60">
             Guest Manager
           </p>
         </div>
@@ -74,7 +74,7 @@ function LoginContent() {
 
             <form onSubmit={onSubmit} className="space-y-6">
               <div className="space-y-2">
-                <label htmlFor="email" className="text-[10px] font-black uppercase tracking-[0.2em] text-ftour-accentSoft/60 ml-1">
+                <label htmlFor="email" className="text-[10px] font-black uppercase tracking-[0.2em] text-ftour-accent-soft/60 ml-1">
                   Adresse Email
                 </label>
                 <input
@@ -90,7 +90,7 @@ function LoginContent() {
               </div>
 
               <div className="space-y-2">
-                <label htmlFor="password" className="text-[10px] font-black uppercase tracking-[0.2em] text-ftour-accentSoft/60 ml-1">
+                <label htmlFor="password" className="text-[10px] font-black uppercase tracking-[0.2em] text-ftour-accent-soft/60 ml-1">
                   Mot de Passe
                 </label>
                 <input
@@ -127,9 +127,9 @@ function LoginContent() {
 
             <div className="pt-4 border-t border-ftour-accent/5">
               <div className="bg-ftour-accent/5 p-4 rounded-2xl border border-ftour-accent/10">
-                <p className="text-[9px] font-black uppercase tracking-widest text-ftour-accentSoft/40 text-center mb-2">Comptes de test</p>
+                <p className="text-[9px] font-black uppercase tracking-widest text-ftour-accent-soft/40 text-center mb-2">Comptes de test</p>
                 <p className="text-[11px] text-ftour-text/60 text-center font-medium">
-                  <span className="text-ftour-accentSoft">admin@example.com</span> / <span className="text-ftour-accentSoft">admin123</span>
+                  <span className="text-ftour-accent-soft">admin@example.com</span> / <span className="text-ftour-accent-soft">admin123</span>
                 </p>
               </div>
             </div>
@@ -148,7 +148,7 @@ export default function LoginPage() {
   return (
     <Suspense fallback={
       <div className="page-shell">
-        <div className="text-ftour-accentSoft">Loading...</div>
+        <div className="text-ftour-accent-soft">Loading...</div>
       </div>
     }>
       <LoginContent />

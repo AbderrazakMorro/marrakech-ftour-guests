@@ -93,7 +93,7 @@ export default function EditGuestPage({ params }: { params: { id: string } }) {
                     <form onSubmit={handleSubmit} className="space-y-6">
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                             <div className="space-y-2">
-                                <label className="text-xs font-black uppercase tracking-widest text-ftour-accentSoft/60 ml-1">Prénom</label>
+                                <label className="text-xs font-black uppercase tracking-widest text-ftour-accent-soft/60 ml-1">Prénom</label>
                                 <input
                                     type="text"
                                     required
@@ -104,7 +104,7 @@ export default function EditGuestPage({ params }: { params: { id: string } }) {
                                 />
                             </div>
                             <div className="space-y-2">
-                                <label className="text-xs font-black uppercase tracking-widest text-ftour-accentSoft/60 ml-1">Nom</label>
+                                <label className="text-xs font-black uppercase tracking-widest text-ftour-accent-soft/60 ml-1">Nom</label>
                                 <input
                                     type="text"
                                     required
@@ -117,7 +117,7 @@ export default function EditGuestPage({ params }: { params: { id: string } }) {
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-xs font-black uppercase tracking-widest text-ftour-accentSoft/60 ml-1">Adresse Email</label>
+                            <label className="text-xs font-black uppercase tracking-widest text-ftour-accent-soft/60 ml-1">Adresse Email</label>
                             <input
                                 type="email"
                                 required
@@ -129,7 +129,7 @@ export default function EditGuestPage({ params }: { params: { id: string } }) {
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-xs font-black uppercase tracking-widest text-ftour-accentSoft/60 ml-1">Téléphone</label>
+                            <label className="text-xs font-black uppercase tracking-widest text-ftour-accent-soft/60 ml-1">Téléphone</label>
                             <input
                                 type="tel"
                                 value={formData.phone}

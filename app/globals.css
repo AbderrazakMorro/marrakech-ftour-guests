@@ -9,7 +9,7 @@
 }
 
 body {
-  @apply min-h-screen bg-ftour-background text-ftour-text font-body antialiased selection:bg-ftour-accent selection:text-ftour-background;
+  @apply min-h-screen bg-ftour-background text-ftour-text font-body antialiased;
   background-image:
     radial-gradient(circle at top, rgba(199, 154, 59, 0.18), transparent 60%),
     radial-gradient(circle at bottom, rgba(138, 24, 24, 0.45), transparent 55%),
@@ -17,16 +17,23 @@ body {
   background-size: cover, cover, theme("backgroundSize.pattern-sm");
 }
 
-h1, h2, h3, h4, .font-display {
-  @apply font-display tracking-tight text-ftour-accentSoft;
+::selection {
+  @apply bg-ftour-accent text-ftour-background;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  @apply font-display tracking-tight text-ftour-accent-soft;
 }
 
 a {
-  @apply text-ftour-accent transition-colors duration-200 underline-offset-4 hover:underline hover:text-ftour-accentSoft;
+  @apply text-ftour-accent transition-colors duration-200 underline-offset-4 hover:underline hover:text-ftour-accent-soft;
 }
 
 .glass {
-  @apply bg-ftour-surfaceSoft backdrop-blur-md border border-ftour-accent/20 shadow-glass;
+  @apply bg-ftour-surface-soft backdrop-blur-md border border-ftour-accent/20 shadow-glass;
 }
 
 .card {
@@ -38,7 +45,7 @@ a {
 }
 
 .btn-outline {
-  @apply inline-flex items-center justify-center rounded-full border-2 border-ftour-accent px-6 py-2.5 text-sm font-bold text-ftour-accent transition-all duration-200 hover:bg-ftour-accent/10 hover:text-ftour-accentSoft active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ftour-accent focus-visible:ring-offset-2 focus-visible:ring-offset-ftour-background;
+  @apply inline-flex items-center justify-center rounded-full border-2 border-ftour-accent px-6 py-2.5 text-sm font-bold text-ftour-accent transition-all duration-200 hover:bg-ftour-accent/10 hover:text-ftour-accent-soft active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ftour-accent focus-visible:ring-offset-2 focus-visible:ring-offset-ftour-background;
 }
 
 .btn-small {
@@ -64,5 +71,3 @@ a {
 .badge {
   @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-bold tracking-wider uppercase;
 }
-
-

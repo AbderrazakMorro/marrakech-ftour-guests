@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState, useRef } from 'react';
 import { Html5Qrcode } from 'html5-qrcode';
 
@@ -243,8 +245,6 @@ export default function ScannerPage() {
         )}
       </div>
     </div>
-  );
-}
   );
 }
 

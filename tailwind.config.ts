@@ -26,9 +26,9 @@ const config: Config = {
         ftour: {
           background: "#1B0B0A",
           surface: "#2C1512",
-          surfaceSoft: "rgba(44, 21, 18, 0.6)",
+          "surface-soft": "rgba(44, 21, 18, 0.6)",
           accent: "#C79A3B",
-          accentSoft: "#F1D7A3",
+          "accent-soft": "#F1D7A3",
           danger: "#C0392B",
           success: "#27AE60",
           text: "#FDF4E3"

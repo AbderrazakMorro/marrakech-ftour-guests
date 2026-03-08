@@ -67,7 +67,7 @@ export default function PWAInstallButton() {
                 <div className="flex flex-col items-end">
                     <button
                         onClick={handleIOSClick}
-                        className="flex items-center gap-2 rounded-full border border-ftour-accent/40 bg-ftour-surface/50 px-4 py-2 text-sm font-medium text-ftour-accentSoft shadow-sm transition-colors hover:bg-ftour-surface"
+                        className="flex items-center gap-2 rounded-full border border-ftour-accent/40 bg-ftour-surface/50 px-4 py-2 text-sm font-medium text-ftour-accent-soft shadow-sm transition-colors hover:bg-ftour-surface"
                     >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -87,7 +87,7 @@ export default function PWAInstallButton() {
                     </button>
                     {showIOSHint && (
                         <div className="absolute right-0 top-12 z-50 w-64 rounded-2xl bg-ftour-surface p-4 text-xs shadow-2xl border border-ftour-accent/30 animate-in fade-in slide-in-from-top-2">
-                            <p className="mb-2 font-semibold text-ftour-accentSoft">
+                            <p className="mb-2 font-semibold text-ftour-accent-soft">
                                 Pour installer l'application sur votre iPhone :
                             </p>
                             <ol className="list-decimal space-y-1.5 pl-4 text-ftour-text/90">
