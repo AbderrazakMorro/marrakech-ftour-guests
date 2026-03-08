@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  @apply min-h-screen bg-ftour-background text-ftour-text font-body antialiased;
+  background-image:
+    radial-gradient(circle at top, rgba(199, 154, 59, 0.18), transparent 60%),
+    radial-gradient(circle at bottom, rgba(138, 24, 24, 0.45), transparent 55%),
+    theme("backgroundImage.marrakech-pattern");
+  background-size: cover, cover, theme("backgroundSize.pattern-sm");
+}
+
+a {
+  @apply text-ftour-accent underline-offset-4 hover:underline;
+}
+
+button {
+  @apply font-medium;
+}
+
+input,
+select,
+textarea {
+  @apply bg-ftour-surface text-ftour-text border border-ftour-accent/30 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-ftour-accent/70;
+}
+
+.card {
+  @apply rounded-2xl bg-ftour-surface/80 backdrop-blur border border-ftour-accent/20 shadow-lg shadow-black/40;
+}
+
+.btn-primary {
+  @apply inline-flex items-center justify-center rounded-full bg-ftour-accent px-4 py-2 text-sm font-semibold text-ftour-background shadow-md hover:bg-ftour-accent/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ftour-accent disabled:opacity-60 disabled:cursor-not-allowed;
+}
+
+.btn-outline {
+  @apply inline-flex items-center justify-center rounded-full border border-ftour-accent px-4 py-2 text-sm font-semibold text-ftour-accent hover:bg-ftour-accent/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ftour-accent;
+}
+
+.page-shell {
+  @apply min-h-screen flex flex-col items-center justify-center px-4 py-10;
+}
+
+.page-container {
+  @apply w-full max-w-5xl mx-auto;
+}
+
+
