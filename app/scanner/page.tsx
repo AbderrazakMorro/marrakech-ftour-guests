@@ -1,7 +1,5 @@
-'use client';
-
 import { useEffect, useState, useRef } from 'react';
-import { Html5QrcodeScanner } from 'html5-qrcode';
+import { Html5Qrcode } from 'html5-qrcode';
 
 interface VerificationResult {
   success: boolean;
@@ -15,88 +13,105 @@ interface VerificationResult {
 }
 
 export default function ScannerPage() {
+  const [isInitializing, setIsInitializing] = useState(false);
   const [scanning, setScanning] = useState(false);
   const [result, setResult] = useState<VerificationResult | null>(null);
-  const scannerRef = useRef<Html5QrcodeScanner | null>(null);
+  const [cameraError, setCameraError] = useState<string | null>(null);
+  const html5QrCodeRef = useRef<Html5Qrcode | null>(null);
   const scannerElementId = 'qr-reader';
 
+  // Cleanup on unmount
   useEffect(() => {
     return () => {
-      if (scannerRef.current) {
-        scannerRef.current.clear();
-      }
+      stopScanning();
     };
   }, []);
 
-  const startScanning = () => {
-    if (scannerRef.current) {
-      scannerRef.current.clear();
-    }
-
-    setResult(null);
-    setScanning(true);
-
-    const scanner = new Html5QrcodeScanner(
-      scannerElementId,
-      {
-        qrbox: { width: 250, height: 250 },
-        fps: 10,
-        aspectRatio: 1.0,
-      },
-      false
-    );
-
-    scanner.render(
-      async (decodedText) => {
-        try {
-          const response = await fetch('/api/guests/verify', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ qrCode: decodedText }),
-          });
-
-          const data = await response.json();
-
-          if (response.ok && data.success) {
-            setResult({
-              success: true,
-              guest: data.guest,
-            });
-            scanner.clear();
-            setScanning(false);
-          } else {
-            setResult({
-              success: false,
-              error: data.error || 'Verification failed',
-              guest: data.guest,
-            });
-            scanner.clear();
-            setScanning(false);
-          }
-        } catch (error) {
-          setResult({
-            success: false,
-            error: 'Failed to verify guest',
-          });
-          scanner.clear();
-          setScanning(false);
-        }
-      },
-      (errorMessage) => {
-        // Ignore scanning errors, just keep scanning
+  const stopScanning = async () => {
+    if (html5QrCodeRef.current && html5QrCodeRef.current.isScanning) {
+      try {
+        await html5QrCodeRef.current.stop();
+        html5QrCodeRef.current.clear();
+      } catch (err) {
+        console.error('Failed to stop scanner:', err);
       }
-    );
-
-    scannerRef.current = scanner;
+    }
   };
 
-  const resetScanner = () => {
+  const startScanning = async () => {
+    setResult(null);
+    setCameraError(null);
+    setIsInitializing(true);
+
+    try {
+      // Initialize instance if not already done
+      if (!html5QrCodeRef.current) {
+        html5QrCodeRef.current = new Html5Qrcode(scannerElementId);
+      }
+
+      await html5QrCodeRef.current.start(
+        { facingMode: "environment" }, // Prefer back camera
+        {
+          fps: 10,
+          qrbox: { width: 250, height: 250 },
+          aspectRatio: 1.0,
+        },
+        async (decodedText) => {
+          handleScanSuccess(decodedText);
+        },
+        (errorMessage) => {
+          // Scanning error (no QR found in frame)
+        }
+      );
+
+      setScanning(true);
+    } catch (err: any) {
+      console.error('Camera start error:', err);
+      setCameraError(err?.message || "Impossible d'accéder à la caméra. Veuillez vérifier les permissions.");
+    } finally {
+      setIsInitializing(false);
+    }
+  };
+
+  const handleScanSuccess = async (decodedText: string) => {
+    // Stop camera immediately after successful scan
+    await stopScanning();
+    setScanning(false);
+
+    try {
+      const response = await fetch('/api/guests/verify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ qrCode: decodedText }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setResult({
+          success: true,
+          guest: data.guest,
+        });
+      } else {
+        setResult({
+          success: false,
+          error: data.error || 'La vérification a échoué',
+          guest: data.guest,
+        });
+      }
+    } catch (error) {
+      setResult({
+        success: false,
+        error: 'Erreur lors de la vérification de l\'invité',
+      });
+    }
+  };
+
+  const resetScanner = async () => {
+    await stopScanning();
     setResult(null);
     setScanning(false);
-    if (scannerRef.current) {
-      scannerRef.current.clear();
-      scannerRef.current = null;
-    }
+    setCameraError(null);
   };
 
   return (
@@ -107,41 +122,58 @@ export default function ScannerPage() {
             Scanner QR
           </h1>
           <p className="text-ftour-text/60 mt-2">
-            Scannez le code QR de l'invité pour valider son entrée.
+            Scannez le code QR de l'invité pour une validation instantanée.
           </p>
         </div>
 
-        {!scanning && !result && (
-          <div className="card flex flex-col items-center justify-center p-12 text-center group">
-            <div className="h-24 w-24 rounded-3xl bg-ftour-accent/10 flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-300">
-              <svg className="w-12 h-12 text-ftour-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-            </div>
-            <p className="text-ftour-text/70 mb-8 max-w-[200px] leading-relaxed">
-              Prêt à commencer la vérification des invités.
-            </p>
+        {cameraError && (
+          <div className="mb-8 p-4 bg-ftour-danger/5 border border-ftour-danger/20 rounded-2xl text-center animate-shake">
+            <p className="text-sm font-bold text-ftour-danger">{cameraError}</p>
             <button
               onClick={startScanning}
-              className="btn-primary px-10 py-4 text-base"
+              className="mt-3 text-xs uppercase font-black tracking-widest text-ftour-danger/60 underline"
             >
-              Lancer le Scanner
+              Réessayer l'accès à la caméra
             </button>
           </div>
         )}
 
-        {scanning && (
-          <div className="card !p-2 overflow-hidden ring-4 ring-ftour-accent/20">
-            <div id={scannerElementId} className="aspect-square overflow-hidden rounded-2xl bg-black"></div>
-            <div className="p-4">
-              <button
-                onClick={resetScanner}
-                className="w-full flex items-center justify-center gap-2 py-3 px-6 rounded-2xl text-ftour-danger font-bold hover:bg-ftour-danger/10 transition-colors"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
-                Arrêter le Scanner
-              </button>
+        {!scanning && !result && (
+          <div className="card flex flex-col items-center justify-center p-12 text-center group">
+            <div className={`h-24 w-24 rounded-3xl bg-ftour-accent/10 flex items-center justify-center mb-8 transition-all duration-300 ${isInitializing ? 'animate-pulse scale-90' : 'group-hover:scale-110'}`}>
+              <svg className={`w-12 h-12 text-ftour-accent transition-opacity ${isInitializing ? 'opacity-40' : 'opacity-100'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
             </div>
+
+            {isInitializing ? (
+              <p className="text-ftour-text font-bold animate-pulse">Initialisation de la caméra...</p>
+            ) : (
+              <>
+                <p className="text-ftour-text/70 mb-8 max-w-[200px] leading-relaxed font-medium">
+                  Utilisez la caméra arrière de votre téléphone pour scanner.
+                </p>
+                <button
+                  onClick={startScanning}
+                  className="btn-primary px-10 py-4 text-base shadow-lg shadow-ftour-accent/20"
+                >
+                  Ouvrir la Caméra
+                </button>
+              </>
+            )}
           </div>
         )}
+
+        <div className={`card !p-2 overflow-hidden ring-4 ring-ftour-accent/20 mb-8 ${scanning ? 'block' : 'hidden'}`}>
+          <div id={scannerElementId} className="aspect-square overflow-hidden rounded-2xl bg-black"></div>
+          <div className="p-4">
+            <button
+              onClick={resetScanner}
+              className="w-full flex items-center justify-center gap-2 py-3 px-6 rounded-2xl text-ftour-danger font-bold hover:bg-ftour-danger/5 transition-colors"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+              Annuler
+            </button>
+          </div>
+        </div>
 
         {result && (
           <div className="card p-8 animate-fade-in">
@@ -153,17 +185,23 @@ export default function ScannerPage() {
                 <h2 className="text-fluid-h3 font-black text-ftour-success mb-2">
                   Invité Confirmé !
                 </h2>
-                <div className="bg-ftour-background/40 p-6 rounded-2xl border border-ftour-accent/10 mt-6">
-                  <p className="text-xl font-display font-black text-ftour-text">
+                <div className="bg-ftour-accent/5 p-6 rounded-3xl border border-ftour-accent/10 mt-6 group">
+                  <p className="text-2xl font-display font-black text-ftour-text uppercase tracking-tight">
                     {result.guest.first_name} {result.guest.last_name}
                   </p>
-                  <p className="text-[10px] uppercase font-bold tracking-[0.2em] text-ftour-text/30 mt-1">ID: {result.guest.id.slice(0, 8)}</p>
+                  <p className="text-[10px] uppercase font-bold tracking-[0.3em] text-ftour-accent mt-2 opacity-50">Validation Reussie</p>
                 </div>
                 <button
-                  onClick={resetScanner}
-                  className="btn-primary w-full mt-10"
+                  onClick={startScanning}
+                  className="btn-primary w-full mt-10 shadow-lg shadow-ftour-accent/20"
                 >
-                  Scanner le Prochain
+                  Continuer le Scan
+                </button>
+                <button
+                  onClick={() => setResult(null)}
+                  className="w-full mt-4 text-[10px] font-black uppercase tracking-[0.2em] text-ftour-text/30 hover:text-ftour-text/60 transition-colors"
+                >
+                  Fermer
                 </button>
               </div>
             ) : (
@@ -174,29 +212,39 @@ export default function ScannerPage() {
                 <h2 className="text-fluid-h3 font-black text-ftour-danger mb-2">
                   Échec de Vérification
                 </h2>
-                <p className="text-ftour-danger/80 text-sm font-bold bg-ftour-danger/5 py-2 px-4 rounded-full border border-ftour-danger/10 inline-block mt-4">
+                <p className="text-ftour-danger text-sm font-bold bg-ftour-danger/5 py-3 px-6 rounded-2xl border border-ftour-danger/10 inline-block mt-4">
                   {result.error}
                 </p>
                 {result.guest && (
                   <div className="mt-8 pt-8 border-t border-ftour-accent/10">
-                    <p className="text-ftour-text/60 text-sm">Ce code appartient à :</p>
-                    <p className="font-bold text-ftour-accentSoft mt-1">
+                    <p className="text-ftour-text/40 text-[10px] uppercase font-bold tracking-widest">Identité détectée :</p>
+                    <p className="font-black text-ftour-text mt-1 text-lg">
                       {result.guest.first_name} {result.guest.last_name}
                     </p>
                   </div>
                 )}
-                <button
-                  onClick={resetScanner}
-                  className="btn-outline w-full mt-10"
-                >
-                  Réessayer
-                </button>
+                <div className="grid grid-cols-2 gap-4 mt-10">
+                  <button
+                    onClick={() => setResult(null)}
+                    className="btn-outline"
+                  >
+                    Retour
+                  </button>
+                  <button
+                    onClick={startScanning}
+                    className="btn-primary shadow-lg shadow-ftour-accent/20"
+                  >
+                    Réessayer
+                  </button>
+                </div>
               </div>
             )}
           </div>
         )}
       </div>
     </div>
+  );
+}
   );
 }
 
