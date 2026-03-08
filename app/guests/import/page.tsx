@@ -41,42 +41,56 @@ export default function ImportPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-red-50 p-6">
+    <div className="animate-slide-up">
       <div className="max-w-2xl mx-auto">
-        <h1 className="text-4xl font-bold text-amber-900 mb-8 text-center">
-          Import Guests from CSV
-        </h1>
+        <div className="mb-10 text-center">
+          <h1 className="text-fluid-h2 font-display font-black leading-tight">
+            Importer des Invités
+          </h1>
+          <p className="text-ftour-text/60 mt-2">
+            Téléchargez un fichier CSV pour envoyer des invitations en masse.
+          </p>
+        </div>
 
-        <div className="bg-white rounded-lg shadow-lg p-8 border-2 border-amber-200">
-          <div className="mb-6">
-            <h2 className="text-xl font-semibold text-amber-900 mb-4">
-              CSV Format Requirements
+        <div className="card space-y-8">
+          <div className="space-y-4">
+            <h2 className="text-fluid-body font-bold text-ftour-accentSoft flex items-center gap-2">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              Format du Fichier CSV
             </h2>
-            <div className="bg-amber-50 p-4 rounded-lg border border-amber-200">
-              <p className="text-sm text-amber-800 mb-2">
-                Your CSV file should have the following columns:
+            <div className="bg-ftour-accent/5 p-5 rounded-2xl border border-ftour-accent/10">
+              <p className="text-xs text-ftour-text/70 mb-3 leading-relaxed">
+                Votre fichier doit contenir les colonnes suivantes (l'ordre n'importe pas) :
               </p>
-              <ul className="list-disc list-inside text-sm text-amber-700 space-y-1">
-                <li>first_name (required)</li>
-                <li>last_name (required)</li>
-                <li>email (required)</li>
-                <li>phone (optional)</li>
-              </ul>
+              <div className="grid grid-cols-2 gap-3">
+                {[
+                  { label: 'first_name', desc: 'Requis' },
+                  { label: 'last_name', desc: 'Requis' },
+                  { label: 'email', desc: 'Requis' },
+                  { label: 'phone', desc: 'Optionnel' },
+                ].map((col) => (
+                  <div key={col.label} className="flex flex-col p-2 rounded-lg bg-ftour-background/40 border border-ftour-accent/5">
+                    <code className="text-[10px] font-bold text-ftour-accent">{col.label}</code>
+                    <span className="text-[9px] uppercase tracking-tighter text-ftour-text/30">{col.desc}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 
           {success && (
-            <div className="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
-              <p className="font-semibold">
-                Successfully imported {success.created} guest(s)!
+            <div className="p-5 bg-ftour-success/10 border border-ftour-success/20 text-ftour-success rounded-2xl animate-fade-in">
+              <p className="font-bold text-sm">
+                Importation de {success.created} invité(s) réussie !
               </p>
               {success.errors && success.errors.length > 0 && (
-                <div className="mt-2">
-                  <p className="text-sm font-semibold">Errors:</p>
-                  <ul className="list-disc list-inside text-sm">
+                <div className="mt-3 pt-3 border-t border-ftour-success/20">
+                  <p className="text-[10px] uppercase font-black tracking-widest opacity-60 mb-2">Erreurs relevées :</p>
+                  <ul className="space-y-1">
                     {success.errors.map((err: any, idx: number) => (
-                      <li key={idx}>
-                        {err.email}: {err.error}
+                      <li key={idx} className="text-xs flex items-center gap-2">
+                        <span className="h-1 w-1 bg-ftour-success rounded-full" />
+                        <span className="font-bold">{err.email}</span>: <span className="opacity-70">{err.error}</span>
                       </li>
                     ))}
                   </ul>
@@ -86,40 +100,48 @@ export default function ImportPage() {
           )}
 
           {error && (
-            <div className="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+            <div className="p-5 bg-ftour-danger/10 border border-ftour-danger/20 text-ftour-danger rounded-2xl text-sm font-bold animate-fade-in">
               {error}
             </div>
           )}
 
-          <div className="space-y-6">
-            <div>
-              <label
-                htmlFor="csv-file"
-                className="block text-sm font-medium text-amber-900 mb-2"
-              >
-                Select CSV File
+          <div className="space-y-6 pt-2">
+            <div className="space-y-2">
+              <label htmlFor="csv-file" className="text-xs font-black uppercase tracking-widest text-ftour-accentSoft/60 ml-1">
+                Sélectionner le fichier .csv
               </label>
-              <input
-                type="file"
-                id="csv-file"
-                accept=".csv"
-                onChange={handleFileUpload}
-                disabled={loading}
-                className="w-full px-4 py-2 border-2 border-amber-200 rounded-lg focus:outline-none focus:border-amber-500 disabled:opacity-50"
-              />
+              <div className="relative group">
+                <input
+                  type="file"
+                  id="csv-file"
+                  accept=".csv"
+                  onChange={handleFileUpload}
+                  disabled={loading}
+                  className="hidden"
+                />
+                <label
+                  htmlFor="csv-file"
+                  className="flex flex-col items-center justify-center p-10 border-2 border-dashed border-ftour-accent/20 rounded-3xl cursor-pointer hover:bg-ftour-accent/5 hover:border-ftour-accent/40 transition-all group"
+                >
+                  <svg className="w-12 h-12 text-ftour-accent/40 group-hover:scale-110 transition-transform mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
+                  <p className="text-sm font-bold text-ftour-text/80">Cliquez pour choisir un fichier</p>
+                  <p className="text-[10px] text-ftour-text/40 mt-1 uppercase tracking-widest">Format supporté: .CSV</p>
+                </label>
+              </div>
             </div>
 
             {loading && (
-              <div className="text-center text-amber-700">
-                Processing CSV and sending invitations...
+              <div className="flex flex-col items-center gap-3 py-4 animate-pulse">
+                <svg className="animate-spin h-6 w-6 text-ftour-accent" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                <p className="text-xs font-bold text-ftour-accentSoft uppercase tracking-widest italic">Importation et envoi des emails en cours...</p>
               </div>
             )}
 
             <button
-              onClick={() => router.push('/guests')}
-              className="w-full bg-gradient-to-r from-amber-500 to-orange-600 text-white font-bold py-3 px-6 rounded-lg hover:shadow-lg transition-all"
+              onClick={() => router.push('/dashboard')}
+              className="btn-outline w-full py-4"
             >
-              View Guests
+              Retour au Dashboard
             </button>
           </div>
         </div>

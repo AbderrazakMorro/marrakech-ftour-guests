@@ -9,57 +9,115 @@ export default function AppShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const isAuthPage = pathname === "/login";
 
+  if (isAuthPage) return <main className="animate-fade-in">{children}</main>;
+
+  const navItems = [
+    {
+      label: "Dashboard", href: "/dashboard", icon: (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+      )
+    },
+    {
+      label: "Guests", href: "/guests", icon: (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+      )
+    },
+    {
+      label: "Import", href: "/guests/import", icon: (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0l-4 4m4-4v12" /></svg>
+      )
+    },
+    {
+      label: "Scanner", href: "/scanner", icon: (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h2M4 8h16" /></svg>
+      )
+    },
+  ];
+
   return (
-    <div className="min-h-screen">
-      {!isAuthPage && (
-        <header className="border-b border-ftour-accent/20 bg-ftour-surface/80 backdrop-blur">
-          <div className="page-container flex items-center justify-between py-4">
-            <Link href="/dashboard" className="flex items-center gap-3">
-              <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-ftour-accent/90 shadow-md shadow-black/40">
-                <span className="h-5 w-5 rotate-12 rounded-md border border-amber-100/50 bg-gradient-to-br from-amber-300 via-amber-500 to-amber-700 shadow-inner shadow-black/60" />
-              </span>
-              <div className="leading-tight">
-                <p className="font-semibold tracking-wide text-ftour-accentSoft">
-                  Marrakech Ftour
-                </p>
-                <p className="text-xs text-ftour-text/70">
-                  Guest & invitation manager
-                </p>
-              </div>
-            </Link>
-            <nav className="flex items-center gap-4 text-sm">
+    <div className="min-h-screen flex flex-col md:flex-row bg-ftour-background selection:bg-ftour-accent selection:text-ftour-background">
+      {/* Desktop Sidebar / Header */}
+      <header className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0 z-50 glass border-r border-ftour-accent/20">
+        <div className="flex flex-col h-full py-8 px-6">
+          <Link href="/dashboard" className="flex items-center gap-3 mb-12">
+            <div className="h-10 w-10 flex items-center justify-center rounded-2xl bg-ftour-accent shadow-premium">
+              <span className="h-6 w-6 rotate-12 rounded-lg border border-white/20 bg-gradient-to-br from-amber-300 to-amber-700 shadow-inner" />
+            </div>
+            <div>
+              <p className="font-display text-lg font-bold">Ftour Manager</p>
+              <p className="text-[10px] text-ftour-text/40 tracking-widest uppercase">Marrakech Event</p>
+            </div>
+          </Link>
+
+          <nav className="flex-1 space-y-2">
+            {navItems.map((item) => (
               <Link
-                href="/guests"
-                className="text-ftour-text/80 hover:text-ftour-accentSoft"
+                key={item.href}
+                href={item.href}
+                className={`flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-200 group ${pathname === item.href
+                    ? "bg-ftour-accent text-ftour-background font-bold shadow-premium"
+                    : "text-ftour-text/60 hover:bg-ftour-accent/10 hover:text-ftour-accentSoft"
+                  }`}
               >
-                Guests
+                <span className={`${pathname === item.href ? "" : "group-hover:scale-110 transition-transform"}`}>{item.icon}</span>
+                <span className="text-sm">{item.label}</span>
               </Link>
-              <Link
-                href="/guests/import"
-                className="text-ftour-text/80 hover:text-ftour-accentSoft"
+            ))}
+          </nav>
+
+          <div className="mt-auto space-y-4 pt-8 border-t border-ftour-accent/10">
+            <PWAInstallButton />
+            <form action="/api/auth/logout" method="post">
+              <button
+                type="submit"
+                className="w-full flex items-center gap-4 px-4 py-3 rounded-2xl text-ftour-danger/70 hover:bg-ftour-danger/10 hover:text-ftour-danger transition-colors text-sm font-bold"
               >
-                Import CSV
-              </Link>
-              <Link
-                href="/scanner"
-                className="text-ftour-text/80 hover:text-ftour-accentSoft"
-              >
-                QR Scanner
-              </Link>
-              <PWAInstallButton />
-              <form action="/api/auth/logout" method="post">
-                <button
-                  type="submit"
-                  className="btn-outline text-xs px-3 py-1.5 rounded-full"
-                >
-                  Logout
-                </button>
-              </form>
-            </nav>
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+                Logout
+              </button>
+            </form>
           </div>
-        </header>
-      )}
-      <main>{children}</main>
+        </div>
+      </header>
+
+      {/* Mobile Header */}
+      <div className="md:hidden flex items-center justify-between px-6 py-4 glass border-b border-ftour-accent/10 sticky top-0 z-50">
+        <Link href="/dashboard" className="flex items-center gap-2">
+          <div className="h-8 w-8 flex items-center justify-center rounded-xl bg-ftour-accent">
+            <span className="h-4 w-4 rotate-12 rounded-md border border-white/20 bg-gradient-to-br from-amber-300 to-amber-700 shadow-inner" />
+          </div>
+          <span className="font-display font-bold">Ftour Manager</span>
+        </Link>
+        <PWAInstallButton />
+      </div>
+
+      {/* Main Content Area */}
+      <main className="flex-1 md:ml-64 animate-fade-in p-4 md:p-12 pb-24 md:pb-12">
+        <div className="max-w-6xl mx-auto">
+          {children}
+        </div>
+      </main>
+
+      {/* Mobile Bottom Navigation */}
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 glass border-t border-ftour-accent/20 px-6 py-3 flex justify-between items-center pb-safe">
+        {navItems.map((item) => (
+          <Link
+            key={item.href}
+            href={item.href}
+            className={`flex flex-col items-center gap-1 transition-all ${pathname === item.href ? "text-ftour-accent" : "text-ftour-text/40"
+              }`}
+          >
+            {item.icon}
+            <span className="text-[10px] font-bold uppercase tracking-tighter">{item.label}</span>
+          </Link>
+        ))}
+        <form action="/api/auth/logout" method="post" className="flex flex-col items-center">
+          <button type="submit" className="text-ftour-danger/60">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+            <span className="text-[10px] font-bold uppercase tracking-tighter mt-1 block">Logout</span>
+          </button>
+        </form>
+      </nav>
     </div>
   );
 }

@@ -2,6 +2,10 @@ import "./globals.css";
 import type { ReactNode } from "react";
 import Script from "next/script";
 import AppShell from "@/components/layout/AppShell";
+import { Inter, Outfit } from "next/font/google";
+
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
 
 export const metadata = {
   title: "Marrakech Ftour Guests",
@@ -23,7 +27,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <link rel="icon" href="/icon-192.png" />
         <link rel="apple-touch-icon" href="/icon-192.png" />
       </head>
-      <body>
+      <body className={`${inter.variable} ${outfit.variable}`}>
         <AppShell>{children}</AppShell>
         <Script id="pwa-service-worker" strategy="afterInteractive">
           {`

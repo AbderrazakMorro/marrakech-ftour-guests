@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import Link from 'next/link';
 
 interface Guest {
   id: string;
@@ -69,157 +70,207 @@ export default function GuestsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-red-50 p-6">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-          <h1 className="text-4xl font-bold text-amber-900 mb-4 md:mb-0">
-            Guest List
+    <div className="space-y-10 animate-slide-up">
+      {/* Header & Actions */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+        <div>
+          <h1 className="text-fluid-h1 font-display font-black leading-tight">
+            Gestion des Invités
           </h1>
-          <div className="flex flex-wrap justify-center gap-4">
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Search guests..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2 border-2 border-amber-200 rounded-lg bg-white text-amber-900 focus:outline-none focus:border-amber-500 w-full sm:w-64"
-              />
-              <svg className="w-5 h-5 absolute left-3 top-2.5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-            </div>
-            <select
-              value={filter}
-              onChange={(e) => {
-                setFilter(e.target.value as any);
-                setPage(1);
-              }}
-              className="px-4 py-2 border-2 border-amber-200 rounded-lg bg-white text-amber-900 focus:outline-none focus:border-amber-500"
-            >
-              <option value="all">All Guests</option>
-              <option value="verified">Verified</option>
-              <option value="not_verified">Not Verified</option>
-            </select>
-            <button
-              onClick={handleExport}
-              className="bg-gradient-to-r from-teal-500 to-cyan-600 text-white font-bold py-2 px-6 rounded-lg hover:shadow-lg transition-all"
-            >
-              Export CSV
-            </button>
-          </div>
+          <p className="text-ftour-text/60 mt-2">
+            Consultez, filtrez et gérez l'ensemble de votre liste d'invités.
+          </p>
         </div>
+        <div className="flex flex-wrap items-center gap-3">
+          <button
+            onClick={handleExport}
+            className="btn-outline flex items-center gap-2"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+            Exporter CSV
+          </button>
+          <Link href="/guests/add" className="btn-primary">
+            + Ajouter un invité
+          </Link>
+        </div>
+      </div>
 
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden border-2 border-amber-200">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gradient-to-r from-amber-500 to-orange-600 text-white">
-                <tr>
-                  <th className="px-6 py-4 text-left">Name</th>
-                  <th className="px-6 py-4 text-left">Email</th>
-                  <th className="px-6 py-4 text-left">Phone</th>
-                  <th className="px-6 py-4 text-center">Status</th>
-                  <th className="px-6 py-4 text-center">Action</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-amber-100">
-                {loading ? (
-                  <tr>
-                    <td colSpan={5} className="px-6 py-12 text-center text-amber-700">
-                      <div className="flex flex-col items-center gap-3">
-                        <div className="w-8 h-8 border-4 border-amber-200 border-t-amber-600 rounded-full animate-spin" />
-                        <span>Updating list...</span>
+      {/* Filters & Search */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="md:col-span-2 relative">
+          <input
+            type="text"
+            placeholder="Rechercher par nom, email..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="input-field pl-12"
+          />
+          <svg className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-ftour-accent/40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+        </div>
+        <select
+          value={filter}
+          onChange={(e) => {
+            setFilter(e.target.value as any);
+            setPage(1);
+          }}
+          className="input-field"
+        >
+          <option value="all">Tous les invités</option>
+          <option value="verified">Vérifiés uniquement</option>
+          <option value="not_verified">Non vérifiés</option>
+        </select>
+      </div>
+
+      {/* Guest List Card */}
+      <div className="card !p-0 overflow-hidden border-none md:border md:border-ftour-accent/10">
+        <div className="hidden md:block">
+          <table className="w-full text-left">
+            <thead>
+              <tr className="bg-ftour-accent/5 text-[10px] uppercase font-black tracking-[0.2em] text-ftour-accentSoft/60">
+                <th className="px-8 py-5">Invité</th>
+                <th className="px-8 py-5">Contact</th>
+                <th className="px-8 py-5 text-center">Statut</th>
+                <th className="px-8 py-5 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-ftour-accent/5">
+              {loading && page === 1 ? (
+                <tr><td colSpan={4} className="px-8 py-24 text-center">
+                  <div className="flex flex-col items-center gap-4 animate-pulse">
+                    <div className="w-10 h-10 border-2 border-ftour-accent/20 border-t-ftour-accent rounded-full animate-spin" />
+                    <span className="text-xs font-bold text-ftour-accentSoft uppercase tracking-widest italic">Chargement...</span>
+                  </div>
+                </td></tr>
+              ) : guests.length === 0 ? (
+                <tr><td colSpan={4} className="px-8 py-16 text-center text-ftour-text/40 italic">Aucun invité trouvé.</td></tr>
+              ) : (
+                guests.map((guest) => (
+                  <tr key={guest.id} className="hover:bg-ftour-accent/5 transition-colors group">
+                    <td className="px-8 py-5">
+                      <p className="font-bold text-ftour-text">{guest.first_name} {guest.last_name}</p>
+                      <p className="text-[10px] text-ftour-text/40 font-mono mt-1">ID: {guest.id.slice(0, 8)}</p>
+                    </td>
+                    <td className="px-8 py-5">
+                      <p className="text-sm font-medium text-ftour-text/80">{guest.email}</p>
+                      <p className="text-xs text-ftour-text/40 mt-0.5">{guest.phone || '-'}</p>
+                    </td>
+                    <td className="px-8 py-5 text-center">
+                      <span className={`badge ${guest.verified ? 'bg-ftour-success/10 text-ftour-success' : 'bg-ftour-accent/10 text-ftour-accent'}`}>
+                        {guest.verified ? 'Vérifié' : 'En attente'}
+                      </span>
+                    </td>
+                    <td className="px-8 py-5 text-right">
+                      <div className="flex justify-end items-center gap-3">
+                        <Link href={`/api/guests/qr/${guest.qr_code}`} target="_blank" className="text-ftour-accent hover:text-ftour-accentSoft p-2" title="Voir QR">
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h2M4 8h16" /></svg>
+                        </Link>
+                        <button
+                          onClick={() => router.push(`/guests/edit/${guest.id}`)}
+                          className="text-ftour-accentSoft hover:text-ftour-accent p-2"
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                        </button>
+                        <button
+                          onClick={async () => {
+                            if (confirm(`Supprimer ${guest.first_name} ?`)) {
+                              const res = await fetch(`/api/guests/${guest.id}`, { method: 'DELETE' });
+                              if (res.ok) fetchGuests();
+                            }
+                          }}
+                          className="text-ftour-danger/50 hover:text-ftour-danger p-2"
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                        </button>
                       </div>
                     </td>
                   </tr>
-                ) : guests.length === 0 ? (
-                  <tr>
-                    <td colSpan={5} className="px-6 py-8 text-center text-amber-700">
-                      No guests found
-                    </td>
-                  </tr>
-                ) : (
-                  guests.map((guest) => (
-                    <tr
-                      key={guest.id}
-                      className="border-b border-amber-100 hover:bg-amber-50"
-                    >
-                      <td className="px-6 py-4 font-medium text-amber-900">
-                        {guest.first_name} {guest.last_name}
-                      </td>
-                      <td className="px-6 py-4 text-amber-700">{guest.email}</td>
-                      <td className="px-6 py-4 text-amber-700">
-                        {guest.phone || '-'}
-                      </td>
-                      <td className="px-6 py-4 text-center">
-                        <span
-                          className={`px-3 py-1 rounded-full text-sm font-semibold ${guest.verified
-                            ? 'bg-green-100 text-green-800'
-                            : 'bg-orange-100 text-orange-800'
-                            }`}
-                        >
-                          {guest.verified ? 'Verified' : 'Pending'}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 text-center">
-                        <div className="flex justify-center items-center gap-3">
-                          <a href={`/api/guests/qr/${guest.qr_code}`} target="_blank" className="text-amber-600 hover:text-amber-800 font-bold text-xs underline" title="View QR">
-                            QR
-                          </a>
-                          <button
-                            onClick={() => router.push(`/guests/edit/${guest.id}`)}
-                            className="text-blue-600 hover:text-blue-800"
-                            title="Edit Guest"
-                          >
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
-                          </button>
-                          <button
-                            onClick={async () => {
-                              if (confirm(`Are you sure you want to delete ${guest.first_name}?`)) {
-                                try {
-                                  const res = await fetch(`/api/guests/${guest.id}`, { method: 'DELETE' });
-                                  if (res.ok) fetchGuests();
-                                  else alert('Failed to delete guest');
-                                } catch (err) {
-                                  alert('Error deleting guest');
-                                }
-                              }
-                            }}
-                            className="text-red-500 hover:text-red-700"
-                            title="Delete Guest"
-                          >
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
 
-          <div className="mt-6 flex flex-col sm:flex-row justify-between items-center gap-4 bg-amber-50 p-4 border-t-2 border-amber-100">
-            <p className="text-amber-800 font-medium">
-              Showing {guests.length} of {totalGuests} guests
-            </p>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => setPage(p => Math.max(1, p - 1))}
-                disabled={page === 1 || loading}
-                className="px-4 py-2 border-2 border-amber-200 rounded-lg text-amber-900 bg-white disabled:opacity-30 hover:bg-amber-100 mr-2 transition-colors"
-              >
-                Previous
-              </button>
-              <div className="px-4 py-2 bg-white rounded-lg font-bold text-amber-900 border-2 border-amber-200 min-w-[120px] text-center">
-                Page {page} of {totalPages}
+        {/* Mobile Card List */}
+        <div className="md:hidden divide-y divide-ftour-accent/10">
+          {loading && page === 1 ? (
+            <div className="p-16 text-center animate-pulse text-ftour-accent">Chargement...</div>
+          ) : guests.length === 0 ? (
+            <div className="p-8 text-center text-ftour-text/40 italic">Aucun invité trouvé.</div>
+          ) : (
+            guests.map((guest) => (
+              <div key={guest.id} className="p-6 space-y-4 active:bg-ftour-accent/5 transition-colors">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <p className="font-bold text-fluid-body">{guest.first_name} {guest.last_name}</p>
+                    <p className="text-[10px] text-ftour-text/40 font-mono uppercase mt-1">#{guest.id.slice(0, 8)}</p>
+                  </div>
+                  <span className={`badge ${guest.verified ? 'bg-ftour-success/10 text-ftour-success' : 'bg-ftour-accent/10 text-ftour-accent'}`}>
+                    {guest.verified ? 'Vérifié' : 'En attente'}
+                  </span>
+                </div>
+                <div className="text-xs text-ftour-text/60 space-y-1">
+                  <p className="flex items-center gap-2">
+                    <svg className="w-3.5 h-3.5 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7 8.914a1.011 1.011 0 01-.2 1.285L3 24h18l-7.2-5.76a1.01 1.01 0 01-.2-1.285L21 8H3z" /></svg>
+                    {guest.email}
+                  </p>
+                  <p className="flex items-center gap-2">
+                    <svg className="w-3.5 h-3.5 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+                    {guest.phone || 'Non renseigné'}
+                  </p>
+                </div>
+                <div className="flex justify-between items-center pt-2">
+                  <Link href={`/api/guests/qr/${guest.qr_code}`} target="_blank" className="btn-small-outline">
+                    QR Code
+                  </Link>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => router.push(`/guests/edit/${guest.id}`)}
+                      className="p-2 bg-ftour-accentSoft/10 text-ftour-accentSoft rounded-xl"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                    </button>
+                    <button
+                      onClick={async () => {
+                        if (confirm(`Supprimer ${guest.first_name} ?`)) {
+                          const res = await fetch(`/api/guests/${guest.id}`, { method: 'DELETE' });
+                          if (res.ok) fetchGuests();
+                        }
+                      }}
+                      className="p-2 bg-ftour-danger/10 text-ftour-danger rounded-xl"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                    </button>
+                  </div>
+                </div>
               </div>
-              <button
-                onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-                disabled={page === totalPages || loading}
-                className="px-4 py-2 border-2 border-amber-200 rounded-lg text-amber-900 bg-white disabled:opacity-30 hover:bg-amber-100 ml-2 transition-colors"
-              >
-                Next
-              </button>
-            </div>
-          </div>
+            ))
+          )}
+        </div>
+      </div>
+
+      {/* Pagination */}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-4">
+        <p className="text-xs text-ftour-text/40 font-bold uppercase tracking-wider">
+          Affichage de {guests.length} sur {totalGuests} invités
+        </p>
+        <div className="flex items-center bg-ftour-surface rounded-full p-1 border border-ftour-accent/10">
+          <button
+            onClick={() => setPage(p => Math.max(1, p - 1))}
+            disabled={page === 1 || loading}
+            className="p-2 disabled:opacity-20 text-ftour-accent"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" /></svg>
+          </button>
+          <span className="px-6 text-xs font-bold text-ftour-accentSoft">
+            Page {page} / {totalPages}
+          </span>
+          <button
+            onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+            disabled={page === totalPages || loading}
+            className="p-2 disabled:opacity-20 text-ftour-accent"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" /></svg>
+          </button>
         </div>
       </div>
     </div>

@@ -78,92 +78,105 @@ export default function EditGuestPage({ params }: { params: { id: string } }) {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-red-50 p-6 flex items-center justify-center">
-            <div className="max-w-md w-full bg-white rounded-2xl shadow-xl overflow-hidden border-2 border-amber-100">
-                <div className="bg-gradient-to-r from-amber-500 to-orange-600 p-6 text-white text-center">
-                    <h1 className="text-2xl font-bold">Edit Guest</h1>
-                    <p className="text-amber-100 text-sm">Update invitation details</p>
+        <div className="animate-slide-up">
+            <div className="max-w-2xl mx-auto">
+                <div className="mb-10 text-center">
+                    <h1 className="text-fluid-h2 font-display font-black leading-tight">
+                        Modifier l'Invité
+                    </h1>
+                    <p className="text-ftour-text/60 mt-2">
+                        Mettez à jour les informations de l'invité ou son statut de vérification.
+                    </p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="p-8 space-y-6">
-                    <div className="grid grid-cols-2 gap-4">
+                <div className="card">
+                    <form onSubmit={handleSubmit} className="space-y-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div className="space-y-2">
+                                <label className="text-xs font-black uppercase tracking-widest text-ftour-accentSoft/60 ml-1">Prénom</label>
+                                <input
+                                    type="text"
+                                    required
+                                    value={formData.first_name}
+                                    onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
+                                    className="input-field"
+                                    placeholder="Jean"
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-xs font-black uppercase tracking-widest text-ftour-accentSoft/60 ml-1">Nom</label>
+                                <input
+                                    type="text"
+                                    required
+                                    value={formData.last_name}
+                                    onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
+                                    className="input-field"
+                                    placeholder="Dupont"
+                                />
+                            </div>
+                        </div>
+
                         <div className="space-y-2">
-                            <label className="text-xs font-bold text-amber-900 uppercase tracking-widest">First Name</label>
+                            <label className="text-xs font-black uppercase tracking-widest text-ftour-accentSoft/60 ml-1">Adresse Email</label>
                             <input
-                                type="text"
+                                type="email"
                                 required
-                                value={formData.first_name}
-                                onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
-                                className="w-full px-4 py-2 border-2 border-amber-100 rounded-lg focus:border-amber-500 outline-none transition-colors"
-                                placeholder="Jean"
+                                value={formData.email}
+                                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                className="input-field"
+                                placeholder="jean.dupont@email.com"
                             />
                         </div>
+
                         <div className="space-y-2">
-                            <label className="text-xs font-bold text-amber-900 uppercase tracking-widest">Last Name</label>
+                            <label className="text-xs font-black uppercase tracking-widest text-ftour-accentSoft/60 ml-1">Téléphone</label>
                             <input
-                                type="text"
-                                required
-                                value={formData.last_name}
-                                onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
-                                className="w-full px-4 py-2 border-2 border-amber-100 rounded-lg focus:border-amber-500 outline-none transition-colors"
-                                placeholder="Dupont"
+                                type="tel"
+                                value={formData.phone}
+                                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                                className="input-field"
+                                placeholder="+212 ..."
                             />
                         </div>
-                    </div>
 
-                    <div className="space-y-2">
-                        <label className="text-xs font-bold text-amber-900 uppercase tracking-widest">Email Address</label>
-                        <input
-                            type="email"
-                            required
-                            value={formData.email}
-                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                            className="w-full px-4 py-2 border-2 border-amber-100 rounded-lg focus:border-amber-500 outline-none transition-colors"
-                            placeholder="jean.dupont@email.com"
-                        />
-                    </div>
+                        <div className="flex items-center gap-4 p-5 bg-ftour-accent/5 rounded-2xl border border-ftour-accent/10 transition-colors hover:bg-ftour-accent/10">
+                            <div className="relative flex items-center">
+                                <input
+                                    type="checkbox"
+                                    id="verified"
+                                    checked={formData.verified}
+                                    onChange={(e) => setFormData({ ...formData, verified: e.target.checked })}
+                                    className="h-6 w-6 rounded-lg border-2 border-ftour-accent/30 bg-transparent text-ftour-accent focus:ring-offset-0 focus:ring-0 cursor-pointer accent-ftour-accent"
+                                />
+                            </div>
+                            <label htmlFor="verified" className="text-sm font-bold text-ftour-text cursor-pointer select-none">
+                                Invité déjà vérifié (Check-in manuel)
+                            </label>
+                        </div>
 
-                    <div className="space-y-2">
-                        <label className="text-xs font-bold text-amber-900 uppercase tracking-widest">Phone Number</label>
-                        <input
-                            type="tel"
-                            value={formData.phone}
-                            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                            className="w-full px-4 py-2 border-2 border-amber-100 rounded-lg focus:border-amber-500 outline-none transition-colors"
-                            placeholder="+212 ..."
-                        />
-                    </div>
-
-                    <div className="flex items-center gap-3 p-4 bg-amber-50 rounded-xl border border-amber-100">
-                        <input
-                            type="checkbox"
-                            id="verified"
-                            checked={formData.verified}
-                            onChange={(e) => setFormData({ ...formData, verified: e.target.checked })}
-                            className="w-5 h-5 accent-amber-600"
-                        />
-                        <label htmlFor="verified" className="text-sm font-medium text-amber-900 cursor-pointer">
-                            Guest Already Verified
-                        </label>
-                    </div>
-
-                    <div className="flex gap-4 pt-4">
-                        <button
-                            type="button"
-                            onClick={() => router.back()}
-                            className="flex-1 py-3 border-2 border-amber-200 text-amber-800 font-bold rounded-xl hover:bg-amber-50 transition-colors"
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            type="submit"
-                            disabled={saving}
-                            className="flex-1 py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white font-bold rounded-xl hover:shadow-lg disabled:opacity-50 transition-all"
-                        >
-                            {saving ? 'Updating...' : 'Save Changes'}
-                        </button>
-                    </div>
-                </form>
+                        <div className="flex flex-col sm:flex-row gap-4 pt-6">
+                            <button
+                                type="button"
+                                onClick={() => router.back()}
+                                className="btn-outline flex-1 py-4 order-2 sm:order-1"
+                            >
+                                Annuler
+                            </button>
+                            <button
+                                type="submit"
+                                disabled={saving}
+                                className="btn-primary flex-1 py-4 order-1 sm:order-2"
+                            >
+                                {saving ? (
+                                    <span className="flex items-center justify-center gap-2">
+                                        <svg className="animate-spin h-5 w-5 text-current" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                                        Mise à jour...
+                                    </span>
+                                ) : 'Enregistrer les Changements'}
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     );

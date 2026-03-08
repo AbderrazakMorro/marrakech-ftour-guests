@@ -48,69 +48,65 @@ export default function AddGuestPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-red-50 p-6">
+    <div className="animate-slide-up">
       <div className="max-w-2xl mx-auto">
-        <h1 className="text-4xl font-bold text-amber-900 mb-8 text-center">
-          Add New Guest
-        </h1>
+        <div className="mb-10">
+          <h1 className="text-fluid-h2 font-display font-black leading-tight text-center">
+            Ajouter un Nouvel Invité
+          </h1>
+          <p className="text-ftour-text/60 text-center mt-2">
+            Remplissez les informations pour envoyer une invitation automatique.
+          </p>
+        </div>
 
-        <div className="bg-white rounded-lg shadow-lg p-8 border-2 border-amber-200">
+        <div className="card">
           {success && (
-            <div className="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
-              Guest added successfully! Redirecting...
+            <div className="mb-8 p-4 bg-ftour-success/10 border border-ftour-success/20 text-ftour-success rounded-xl text-sm font-bold animate-fade-in text-center">
+              Invité ajouté avec succès ! Redirection...
             </div>
           )}
 
           {error && (
-            <div className="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+            <div className="mb-8 p-4 bg-ftour-danger/10 border border-ftour-danger/20 text-ftour-danger rounded-xl text-sm font-bold animate-fade-in text-center">
               {error}
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label
-                htmlFor="first_name"
-                className="block text-sm font-medium text-amber-900 mb-2"
-              >
-                First Name *
-              </label>
-              <input
-                type="text"
-                id="first_name"
-                required
-                value={formData.first_name}
-                onChange={(e) =>
-                  setFormData({ ...formData, first_name: e.target.value })
-                }
-                className="w-full px-4 py-2 border-2 border-amber-200 rounded-lg focus:outline-none focus:border-amber-500"
-              />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label htmlFor="first_name" className="text-xs font-black uppercase tracking-widest text-ftour-accentSoft/60 ml-1">
+                  Prénom *
+                </label>
+                <input
+                  type="text"
+                  id="first_name"
+                  required
+                  value={formData.first_name}
+                  onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
+                  className="input-field"
+                  placeholder="Ex: Amine"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label htmlFor="last_name" className="text-xs font-black uppercase tracking-widest text-ftour-accentSoft/60 ml-1">
+                  Nom *
+                </label>
+                <input
+                  type="text"
+                  id="last_name"
+                  required
+                  value={formData.last_name}
+                  onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
+                  className="input-field"
+                  placeholder="Ex: Alaoui"
+                />
+              </div>
             </div>
 
-            <div>
-              <label
-                htmlFor="last_name"
-                className="block text-sm font-medium text-amber-900 mb-2"
-              >
-                Last Name *
-              </label>
-              <input
-                type="text"
-                id="last_name"
-                required
-                value={formData.last_name}
-                onChange={(e) =>
-                  setFormData({ ...formData, last_name: e.target.value })
-                }
-                className="w-full px-4 py-2 border-2 border-amber-200 rounded-lg focus:outline-none focus:border-amber-500"
-              />
-            </div>
-
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-amber-900 mb-2"
-              >
+            <div className="space-y-2">
+              <label htmlFor="email" className="text-xs font-black uppercase tracking-widest text-ftour-accentSoft/60 ml-1">
                 Email *
               </label>
               <input
@@ -118,38 +114,42 @@ export default function AddGuestPage() {
                 id="email"
                 required
                 value={formData.email}
-                onChange={(e) =>
-                  setFormData({ ...formData, email: e.target.value })
-                }
-                className="w-full px-4 py-2 border-2 border-amber-200 rounded-lg focus:outline-none focus:border-amber-500"
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                className="input-field"
+                placeholder="amine.alaoui@email.com"
               />
             </div>
 
-            <div>
-              <label
-                htmlFor="phone"
-                className="block text-sm font-medium text-amber-900 mb-2"
-              >
-                Phone
+            <div className="space-y-2">
+              <label htmlFor="phone" className="text-xs font-black uppercase tracking-widest text-ftour-accentSoft/60 ml-1">
+                Téléphone
               </label>
               <input
                 type="tel"
                 id="phone"
                 value={formData.phone}
-                onChange={(e) =>
-                  setFormData({ ...formData, phone: e.target.value })
-                }
-                className="w-full px-4 py-2 border-2 border-amber-200 rounded-lg focus:outline-none focus:border-amber-500"
+                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                className="input-field"
+                placeholder="+212 6..."
               />
             </div>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-gradient-to-r from-amber-500 to-orange-600 text-white font-bold py-3 px-6 rounded-lg hover:shadow-lg transition-all disabled:opacity-50"
-            >
-              {loading ? 'Adding Guest...' : 'Add Guest & Send Invitation'}
-            </button>
+            <div className="pt-4">
+              <button
+                type="submit"
+                disabled={loading}
+                className="btn-primary w-full py-4 text-base"
+              >
+                {loading ? (
+                  <span className="flex items-center gap-2">
+                    <svg className="animate-spin h-5 w-5 text-current" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                    Traitement...
+                  </span>
+                ) : (
+                  'Ajouter & Envoyer l\'Invitation'
+                )}
+              </button>
+            </div>
           </form>
         </div>
       </div>
