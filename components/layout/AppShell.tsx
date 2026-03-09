@@ -110,15 +110,18 @@ export default function AppShell({ children }: { children: ReactNode }) {
                 <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
                 <span className={`whitespace-nowrap transition-all duration-300 overflow-hidden ${isSidebarExpanded ? "opacity-100 w-auto" : "opacity-0 w-0"
                   }`}>
-                  Logout
+                  Déconnexion
                 </span>
                 {!isSidebarExpanded && (
                   <div className="absolute left-full ml-4 px-3 py-2 bg-ftour-danger text-white text-xs font-bold rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap shadow-premium z-[60]">
-                    Logout
+                    Déconnexion
                   </div>
                 )}
               </button>
             </form>
+            <div className={`mt-4 px-2 py-1 text-[8px] font-black uppercase tracking-[0.3em] text-ftour-accent/20 border border-ftour-accent/10 rounded-lg text-center transition-opacity duration-300 ${isSidebarExpanded ? "opacity-100" : "opacity-0"}`}>
+              v1.0. stable
+            </div>
           </div>
         </div>
       </header>
