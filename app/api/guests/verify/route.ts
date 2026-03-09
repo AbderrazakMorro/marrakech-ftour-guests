@@ -27,7 +27,28 @@ export async function POST(request: NextRequest) {
 
     const supabase = createClient();
 
-    // Find guest by QR code token (hash)
+    // 1. Attempt to mark as verified in one go (where qr_code matches and not yet verified)
+    const { data: updatedGuest, error: updateError } = await supabase
+      .from('guests')
+      .update({ verified: true })
+      .eq('qr_code', qrToken)
+      .eq('verified', false)
+      .select()
+      .single();
+
+    if (updatedGuest) {
+      return NextResponse.json({
+        success: true,
+        guest: {
+          id: updatedGuest.id,
+          first_name: updatedGuest.first_name,
+          last_name: updatedGuest.last_name,
+          verified: updatedGuest.verified,
+        },
+      });
+    }
+
+    // 2. If no rows were updated, find out why (invalid token or already verified)
     const { data: guest, error: fetchError } = await supabase
       .from('guests')
       .select('*')
@@ -36,16 +57,15 @@ export async function POST(request: NextRequest) {
 
     if (fetchError || !guest) {
       return NextResponse.json(
-        { error: 'Guest not found' },
+        { error: 'Invité non trouvé ou code QR invalide' },
         { status: 404 }
       );
     }
 
-    // Check if already verified
     if (guest.verified) {
       return NextResponse.json(
         {
-          error: 'Guest already verified',
+          error: 'Cet invité est déjà vérifié',
           guest: {
             id: guest.id,
             first_name: guest.first_name,
@@ -57,30 +77,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Mark as verified
-    const { data: updatedGuest, error: updateError } = await supabase
-      .from('guests')
-      .update({ verified: true })
-      .eq('id', guest.id)
-      .select()
-      .single();
-
-    if (updateError) {
-      return NextResponse.json(
-        { error: updateError.message },
-        { status: 500 }
-      );
-    }
-
-    return NextResponse.json({
-      success: true,
-      guest: {
-        id: updatedGuest.id,
-        first_name: updatedGuest.first_name,
-        last_name: updatedGuest.last_name,
-        verified: updatedGuest.verified,
-      },
-    });
+    return NextResponse.json(
+      { error: 'Erreur lors de la mise à jour de la vérification' },
+      { status: 500 }
+    );
   } catch (error) {
     return NextResponse.json(
       { error: 'Failed to verify guest' },
