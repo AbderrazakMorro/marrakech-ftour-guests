@@ -191,7 +191,7 @@ export default function ScannerPage() {
             Scanner Invitations
           </h1>
           <p className="text-ftour-text/60 mt-2">
-            PWA Scanner • Mode Production v1.1
+            PWA Scanner • Mode Production v1.2
           </p>
         </div>
 
